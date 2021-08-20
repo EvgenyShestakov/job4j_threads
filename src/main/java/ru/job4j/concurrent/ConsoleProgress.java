@@ -16,7 +16,7 @@ public class ConsoleProgress implements Runnable {
                 Thread.currentThread().interrupt();
             }
             index++;
-            if (index == 3) {
+            if (index == strings.length) {
                 index = 0;
             }
         }
