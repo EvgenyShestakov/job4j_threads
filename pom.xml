@@ -13,7 +13,7 @@
 
     <groupId>ru.job4j</groupId>
     <artifactId>job4j_threads</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -68,11 +68,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.16</version>
-        </dependency>
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>net.jcip</groupId>
