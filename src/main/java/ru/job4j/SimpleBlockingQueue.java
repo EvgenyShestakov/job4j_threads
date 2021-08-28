@@ -30,12 +30,20 @@ public class SimpleBlockingQueue<T> {
     public T poll() throws InterruptedException {
         T t;
         synchronized (this) {
-            while (queue.size() == 0) {
+            while (isEmpty()) {
                 wait();
             }
             t = queue.poll();
             notify();
         }
         return t;
+    }
+
+    public boolean isEmpty() {
+        boolean empty = false;
+        if (queue.size() == 0) {
+            empty = true;
+        }
+        return empty;
     }
 }
