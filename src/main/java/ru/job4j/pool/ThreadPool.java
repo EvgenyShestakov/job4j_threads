@@ -9,28 +9,7 @@ public class ThreadPool {
     private final List<Thread> threads = new LinkedList<>();
     private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(10);
 
-    public void work(Runnable job) throws InterruptedException {
-        tasks.offer(job);
-    }
-
-    public void shutdown() {
-        for (Thread thread : threads) {
-            thread.interrupt();
-        }
-    }
-
-    public List<Thread> getThreads() {
-        return threads;
-    }
-
-    public SimpleBlockingQueue<Runnable> getTasks() {
-        return tasks;
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        ThreadPool threadPool = new ThreadPool();
-        List<Thread> threads = threadPool.getThreads();
-        SimpleBlockingQueue<Runnable> tasks = threadPool.getTasks();
+    public ThreadPool() {
         int size = Runtime.getRuntime().availableProcessors();
         for (int index = 0; index < size; index++) {
             threads.add(new Thread(() -> {
@@ -48,7 +27,20 @@ public class ThreadPool {
         for (Thread thread : threads) {
             thread.start();
         }
+    }
 
+    public void work(Runnable job) throws InterruptedException {
+        tasks.offer(job);
+    }
+
+    public void shutdown() {
+        for (Thread thread : threads) {
+            thread.interrupt();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        ThreadPool threadPool = new ThreadPool();
         for (int index = 0; index < 20; index++) {
             threadPool.work(() -> {
                 System.out.println("Beginning of work " + Thread.currentThread().getName());
