@@ -1,12 +1,9 @@
 package ru.job4j.pools;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-public class ParallelSearch<T> extends RecursiveTask<List<Integer>> {
+public class ParallelSearch<T> extends RecursiveTask<Integer> {
     private final T[] array;
     private final int from;
     private final int to;
@@ -20,7 +17,7 @@ public class ParallelSearch<T> extends RecursiveTask<List<Integer>> {
     }
 
     @Override
-    protected List<Integer> compute() {
+    protected Integer compute() {
         if (to - from <= 10) {
             return linearSearch();
         }
@@ -29,24 +26,31 @@ public class ParallelSearch<T> extends RecursiveTask<List<Integer>> {
         ParallelSearch<T> secondSearch = new ParallelSearch<>(array, mid + 1, to, elem);
         firstSearch.fork();
         secondSearch.fork();
-        List<Integer> first = firstSearch.join();
-        List<Integer> second = secondSearch.join();
-        first.addAll(second);
-        return first;
+        int result;
+        Integer first = firstSearch.join();
+        Integer second = secondSearch.join();
+        if (first >= 0) {
+            result = first;
+        } else if (second >= 0) {
+            result = second;
+        } else {
+            result = -1;
+        }
+        return result;
     }
 
-    private List<Integer> linearSearch() {
-        List<Integer> list = new ArrayList<>();
+    private Integer linearSearch() {
+        int index = -1;
         for (int i = from; i <= to; i++) {
             if (array[i].equals(elem)) {
-                list.add(i);
+                index = i;
             }
         }
-        return list;
+        return index;
     }
 
-    public List<Integer> search() {
-        List<Integer> result;
+    public Integer search() {
+        Integer result;
         if (array.length <= 10) {
             result = linearSearch();
         } else {
@@ -54,18 +58,5 @@ public class ParallelSearch<T> extends RecursiveTask<List<Integer>> {
             result = forkJoinPool.invoke(this);
         }
         return result;
-    }
-
-    public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<>(30);
-        for (int i = 0; i < 30; i++) {
-            list.add(i);
-        }
-        Collections.shuffle(list);
-        Integer[] integers = list.toArray(new Integer[0]);
-        integers[0] = 7;
-        ParallelSearch<Integer> parallelSearch = new ParallelSearch<>(integers, 0, 29, 7);
-        List<Integer> result = parallelSearch.search();
-        System.out.println(result);
     }
 }
