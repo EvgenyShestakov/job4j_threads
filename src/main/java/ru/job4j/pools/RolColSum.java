@@ -51,12 +51,12 @@ public class RolColSum {
         int n = matrix.length;
         int count = 0;
         Sums[] sums = new Sums[matrix.length];
-        for (int row = 0, col = 0; row < n; row++, col++) {
+        for (int i = 0; i < n; i++) {
             int sumCol = 0;
             int sumRow = 0;
-            for (int i = 0; i < n; i++) {
-                sumRow += matrix[i][col];
-                sumCol += matrix[row][i];
+            for (int j = 0; j < n; j++) {
+                sumRow += matrix[j][i];
+                sumCol += matrix[i][j];
             }
             sums[count++] = new Sums(sumRow, sumCol);
         }
