@@ -23,8 +23,12 @@ public class RolColSum {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Sums)) return false;
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Sums)) {
+                return false;
+            }
             Sums sums = (Sums) o;
             return getRowSum() == sums.getRowSum() && getColSum() == sums.getColSum();
         }
@@ -36,6 +40,14 @@ public class RolColSum {
     }
 
     public static Sums[] sum(int[][] matrix) {
+        return count(matrix);
+    }
+
+    public static CompletableFuture<Sums[]> asyncSum(int[][] matrix) {
+        return CompletableFuture.supplyAsync(() -> count(matrix));
+    }
+
+    private static Sums[] count(int[][] matrix) {
         int n = matrix.length;
         int count = 0;
         Sums[] sums = new Sums[matrix.length];
@@ -49,23 +61,5 @@ public class RolColSum {
             sums[count++] = new Sums(sumRow, sumCol);
         }
         return sums;
-    }
-
-    public static CompletableFuture<Sums[]> asyncSum(int[][] matrix) {
-        return CompletableFuture.supplyAsync(() -> {
-            int n = matrix.length;
-            int count = 0;
-            Sums[] sums = new Sums[matrix.length];
-            for (int row = 0, col = 0; row < n; row++, col++) {
-                int sumCol = 0;
-                int sumRow = 0;
-                for (int i = 0; i < n; i++) {
-                    sumRow += matrix[i][col];
-                    sumCol += matrix[row][i];
-                }
-                sums[count++] = new Sums(sumRow, sumCol);
-            }
-            return sums;
-        });
     }
 }
