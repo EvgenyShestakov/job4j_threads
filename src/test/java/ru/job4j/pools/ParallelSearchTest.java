@@ -21,7 +21,7 @@ public class ParallelSearchTest {
     @Test
     public void whenElemNotFound() {
         Integer[] mass = new Integer[30];
-        for (int i = 0; i < mass.length ; i++) {
+        for (int i = 0; i < mass.length; i++) {
             mass[i] = i;
         }
         ParallelSearch<Integer> parallelSearch = new ParallelSearch<>(mass, 0, 29, 50);
